@@ -1,0 +1,12 @@
+{
+  "id": "./",
+  "name": "ShelfGuard",
+  "short_name": "ShelfGuard",
+  "description": "Pregled živil in rokov uporabe v tvoji kuhinji.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#eceef0",
+  "theme_color": "#eceef0",
+  "icons": [{"src":"brand.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}

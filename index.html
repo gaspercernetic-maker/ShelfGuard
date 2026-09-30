@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="sl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#eceef0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="ShelfGuard" />
+    <link rel="icon" type="image/svg+xml" href="brand.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <title>ShelfGuard — domača zaloga</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" id="brand-home" href="#home" aria-label="ShelfGuard, domov"><img class="brand-symbol" src="brand.svg" alt="" /><span>Shelf<span class="brand-light">Guard</span></span></a>
+        <div class="topbar-right"><span class="date-label" id="today-label"></span><button class="round-button" id="notifications-button" aria-label="Odpri obvestila"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><i class="notification-dot"></i></button></div>
+      </header>
+
+      <main class="content">
+        <section class="view active" id="view-home" aria-labelledby="home-title">
+          <div class="welcome-row"><div><p class="overline">TVOJA KUHINJA</p><h1 id="home-title">Dobro jutro.</h1><p class="lede">Tukaj je pregled tvoje zaloge.</p></div><button class="button button-dark" data-action="new"><span class="plus">＋</span> Dodaj živilo</button></div>
+          <div class="overview-grid">
+            <article class="overview-card total-card" role="button" tabindex="0" data-stat-filter="all" aria-label="Pokaži vsa živila na zalogi"><div class="overview-top"><span>Na zalogi</span><span class="orb orb-gray">▤</span></div><strong id="total-count">0</strong><small>pakiranj</small><div class="soft-art art-stack"><span></span><span></span><span></span></div></article>
+            <article class="overview-card soon-card" role="button" tabindex="0" data-stat-filter="soon" aria-label="Pokaži živila, ki jih porabi kmalu"><div class="overview-top"><span>Porabi kmalu</span><span class="orb orb-amber">◷</span></div><strong id="soon-count">0</strong><small>v naslednjih 5 dneh</small><div class="progress-track"><i id="soon-progress"></i></div></article>
+            <article class="overview-card expired-card" role="button" tabindex="0" data-stat-filter="expired" aria-label="Pokaži živila s pretečenim rokom"><div class="overview-top"><span>Pretečen rok</span><span class="orb orb-coral">!</span></div><strong id="expired-count">0</strong><small>pakiranj za pregled</small><div class="expired-spark">✳</div></article>
+          </div>
+          <div class="section-heading"><div><p class="overline">POZORNOST</p><h2>Porabi najprej</h2></div><button class="quiet-link" data-go="inventory">Vsa živila <span>↗</span></button></div>
+          <div class="critical-list" id="critical-list"></div>
+          <section class="surface waste-feedback" id="waste-feedback" aria-live="polite"></section>
+          <section class="surface waste-feedback" id="waste-feedback" aria-live="polite"></section>
+          <div class="home-lower">
+            <section class="surface storage-summary"><div class="section-heading compact"><div><p class="overline">KJE SO STVARI</p><h2>Mesta shranjevanja</h2></div><button class="icon-link" data-go="settings" aria-label="Uredi mesta">↗</button></div><div class="storage-list" id="storage-summary"></div></section>
+            <section class="surface tip-card"><span class="tip-icon">✳</span><p class="overline">MAJHEN OPOMNIK</p><h2>Manj zavržene hrane,<br />več dobrih obrokov.</h2><p>Začni pri živilih, ki jim rok najprej poteče.</p><button class="quiet-link" data-go="inventory">Preglej zalogo <span>→</span></button><div class="tip-illustration"><span>◌</span><span>◍</span><span>◌</span></div></section>
+          </div>
+        </section>
+
+        <section class="view" id="view-inventory" aria-labelledby="inventory-title">
+          <div class="page-heading"><div><p class="overline">TVOJA EVIDENCA</p><h1 id="inventory-title">Vsa živila</h1><p class="lede">Vsako pakiranje spremlja svoj rok uporabe.</p></div><button class="button button-dark" data-action="new"><span class="plus">＋</span> Dodaj živilo</button></div>
+          <div class="inventory-locations" id="inventory-locations"></div>
+          <section class="location-stock-view hidden" id="location-stock-view">
+            <div class="location-back-row"><button class="back-link" id="location-back">← Mesta shranjevanja</button><div><p class="overline">PREGLED MESTA</p><h2 id="selected-location-title">Hladilnik</h2></div></div>
+            <div class="filter-bar"><label class="searchbox"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m16 16 4.5 4.5"/></svg><input id="search-input" type="search" placeholder="Išči med živili" /></label><div class="filter-scroll" id="filter-chips"><button class="filter-chip active" data-filter="all">Vse</button><button class="filter-chip" data-filter="soon">Porabi kmalu</button><button class="filter-chip" data-filter="expired">Pretečeno</button><button class="filter-chip" data-filter="opened">Odprto</button></div></div>
+            <div class="inventory-head"><span>ŽIVILO</span><span>KOLIČINA</span><span>ROK / STATUS</span><span></span></div>
+            <div class="inventory-list" id="inventory-list"></div>
+            <div class="empty-state hidden" id="empty-inventory"><span class="empty-art">◌</span><h2>Tukaj še ni živil.</h2><p>Dodaj živilo in ga shrani na to mesto.</p><button class="button button-dark" data-action="new">＋ Dodaj živilo</button></div>
+          </section>
+        </section>
+
+        <section class="view" id="view-add" aria-labelledby="add-title">
+          <div class="page-heading"><div><p class="overline">NOVA ZALOGA</p><h1 id="add-title">Dodaj živilo</h1><p class="lede">Vnesi podatke s pakiranja.</p></div><button class="button button-light" data-go="inventory">Zapri <span>×</span></button></div>
+          <form class="add-layout" id="food-form">
+            <section class="surface form-main"><div class="form-section-title"><span class="step-number">01</span><div><h2>Osnovni podatki</h2><p>Za lažje iskanje in predlog shranjevanja.</p></div></div>
+              <label class="field full"><span>Ime živila</span><input name="name" required placeholder="Na primer: Polnomastno mleko" /></label>
+              <div class="form-two"><label class="field"><span>Kategorija</span><select name="category" id="category-select" required></select></label><label class="field"><span>Mesto shranjevanja</span><select name="location" id="location-select" required></select></label></div>
+              <div class="suggestion" id="storage-suggestion"><span class="suggestion-mark">✳</span><span>Predlagano mesto: <strong>Hladilnik</strong></span><button type="button" id="use-suggestion">Uporabi</button></div>
+              <div class="form-section-title lower-title"><span class="step-number">02</span><div><h2>Pakiranje in rok</h2><p>Vsako pakiranje lahko spremljaš ločeno.</p></div></div>
+              <div id="package-fields"></div><button class="add-package" type="button" id="add-package">＋ Dodaj pakiranje z drugim rokom</button>
+            </section>
+            <aside class="surface form-aside"><div class="form-section-title"><span class="step-number">03</span><div><h2>Odprto pakiranje?</h2><p>Rok po odprtju lahko dodaš zdaj ali pozneje.</p></div></div>
+              <label class="switch-row"><span><strong>Živilo je že odprto</strong><small>Začni spremljati priporočeni rok porabe.</small></span><input type="checkbox" name="opened" id="opened-toggle" /><i class="switch"></i></label>
+              <div class="opened-fields hidden" id="opened-fields"><label class="field"><span>Datum odprtja</span><input name="openedAt" type="date" /></label><label class="field"><span>Porabi v (dneh)</span><input name="daysAfterOpen" type="number" min="1" placeholder="npr. 3" /></label></div>
+              <div class="form-note"><span>ⓘ</span> Rok po odprtju se izračuna od dneva, ko si pakiranje odprl.</div>
+              <div class="form-actions"><button type="button" class="button button-light" data-go="inventory">Prekliči</button><button type="submit" class="button button-dark">Shrani živilo <span>→</span></button></div>
+            </aside>
+          </form>
+        </section>
+
+        <section class="view" id="view-settings" aria-labelledby="settings-title">
+          <div class="page-heading"><div><p class="overline">PO TVOJE</p><h1 id="settings-title">Uredi shrambo</h1><p class="lede">Dodaj kategorije in poimenuj svoja mesta.</p></div></div>
+          <section class="surface setting-panel appearance-panel"><div class="panel-title"><div><p class="overline">PRIKAZ</p><h2>Videz aplikacije</h2></div><span class="appearance-symbol">◐</span></div><label class="appearance-control" for="theme-select"><span><strong>Tema</strong><small>Izberi svetel ali temen videz.</small></span><select id="theme-select"><option value="light">Svetla</option><option value="dark">Temna</option></select></label><label class="appearance-control" for="language-select"><span><strong>Jezik</strong><small>Izberi jezik aplikacije.</small></span><select id="language-select"><option value="sl">Slovenščina</option><option value="en">English</option></select></label><div class="reset-row"><span><strong>Ponastavi podatke</strong><small>Odstrani živila, mesta in kategorije.</small></span><button type="button" class="reset-button" id="reset-data">Ponastavi</button></div></section>
+          <div class="settings-grid"><section class="surface setting-panel"><div class="panel-title"><div><p class="overline">PROSTORI</p><h2>Mesta shranjevanja</h2></div><button class="round-add" id="add-location" aria-label="Dodaj mesto">＋</button></div><div class="setting-items" id="locations-list"></div><form class="inline-create hidden" id="location-form"><input name="name" placeholder="Ime novega mesta" required /><select name="icon" aria-label="Simbol mesta"></select><button type="submit">Dodaj</button></form><p class="panel-footnote">Mesta se prikažejo kot predlogi pri dodajanju živila.</p></section>
+            <section class="surface setting-panel"><div class="panel-title"><div><p class="overline">RAZVRSTITEV</p><h2>Kategorije živil</h2></div><button class="round-add" id="add-category" aria-label="Dodaj kategorijo">＋</button></div><div class="setting-items" id="categories-list"></div><form class="inline-create hidden" id="category-form"><input name="name" placeholder="Ime nove kategorije" required /><select name="icon" aria-label="Simbol kategorije"></select><select name="location" aria-label="Predlagano mesto"></select><button type="submit">Dodaj</button></form><p class="panel-footnote">Vsaka kategorija ima svoje privzeto mesto.</p></section>
+          </div>
+          <footer class="app-credit"><div class="credit-brand"><img src="brand.svg" alt="" /><strong>ShelfGuard</strong><span>V1.0 · Beta</span></div><p>Razvil Gašper Černetič · Manj zavržene hrane, več pregleda.</p><small>Zaloga se trenutno shranjuje samo v tem brskalniku.</small></footer>
+        </section>
+      </main>
+
+      <nav class="bottom-nav" aria-label="Glavna navigacija"><div class="bottom-nav-track"><button class="nav-item active" data-view="home"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-6v-7h-4v7H4a1 1 0 0 1-1-1z"/></svg></span><span>Pregled</span></button><button class="nav-item" data-view="inventory"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5zM8 8h8M8 12h8M8 16h5"/></svg></span><span>Živila</span></button><button class="nav-item add-nav" data-view="add" aria-label="Dodaj živilo"><span class="add-nav-orb">＋</span><span>Dodaj</span></button><button class="nav-item" data-view="settings"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/><circle cx="9" cy="7" r="2"/><circle cx="15" cy="12" r="2"/><circle cx="11" cy="17" r="2"/></svg></span><span>Uredi</span></button></div></nav>
+    </div>
+    <div class="toast" id="toast" role="status"></div>
+    <dialog id="edit-dialog" class="edit-dialog"><form method="dialog"><button class="dialog-close" aria-label="Zapri">×</button></form><div id="dialog-content"></div></dialog>
+    <dialog id="notifications-dialog" class="edit-dialog notifications-dialog"><form method="dialog"><button class="dialog-close" aria-label="Zapri">×</button></form><div id="notifications-content"></div></dialog>
+  </body>
+</html>
