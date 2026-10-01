@@ -6,7 +6,10 @@
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#eceef0",
-  "theme_color": "#eceef0",
-  "icons": [{"src":"brand.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+  "background_color": "#edf1eb",
+  "theme_color": "#edf1eb",
+  "icons": [
+    {"src":"shelfguard-icon-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},
+    {"src":"shelfguard-icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
+  ]
 }

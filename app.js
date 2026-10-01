@@ -64,9 +64,11 @@ Object.assign(ENGLISH, {
   "Še ni dodanih kategorij.": "No categories added yet.", "Predlog: brez mesta": "Suggestion: no location", "Predlog: Hladilnik": "Suggestion: Fridge",
   "Predlog: Shramba": "Suggestion: Pantry", "Predlog: Zamrzovalnik": "Suggestion: Freezer", "Pakiranje in rok": "Package and date",
   "Koliko pakiranj želiš spremeniti?": "How many packages do you want to update?", "v tej skupini": "in this group", "Odprto": "Opened", "Vsa mesta": "All locations", "← Mesta shranjevanja": "← Storage locations", "Zapri": "Close",
-  "V1.0 · Beta": "V1.0 · Beta", "Razvil Gašper Černetič · Manj zavržene hrane, več pregleda.": "Built by Gašper Černetič · Less food waste, more peace of mind.", "Zaloga se trenutno shranjuje samo v tem brskalniku.": "Your inventory is currently stored only in this browser.",
+  "V1.0 · Beta · Build 2": "V1.0 · Beta · Build 2", "Razvil Gašper Černetič · Manj zavržene hrane, več pregleda.": "Built by Gašper Černetič · Less food waste, more peace of mind.", "Zaloga se trenutno shranjuje samo v tem brskalniku.": "Your inventory is currently stored only in this browser.",
   "Označeno kot porabljeno.": "Marked as used up.", "pakiranja": "packages", "pakiranj": "packages", "pakiranje": "package"
 });
+Object.assign(ENGLISH, { "Dober dan.": "Good afternoon.", "Dober večer.": "Good evening." });
+
 function englishText(value) {
   const trimmed = value.trim();
   if (ENGLISH[trimmed]) return value.replace(trimmed, ENGLISH[trimmed]);
@@ -131,6 +133,8 @@ function applyTheme(theme) {
   const dark = theme === "dark";
   document.body.classList.toggle("dark-mode", dark);
   localStorage.setItem(THEME_KEY, dark ? "dark" : "light");
+  const themeColor = $("meta[name='theme-color']");
+  if (themeColor) themeColor.content = dark ? "#111713" : "#edf1eb";
   const select = $("#theme-select");
   if (select) select.value = dark ? "dark" : "light";
 }
@@ -197,6 +201,7 @@ function toast(message) {
 }
 
 function renderHome() {
+  updateGreeting();
   const activeFoods = state.foods.filter((food) => !food.consumed);
   const critical = activeFoods.map((food) => ({ food, status: foodStatus(food) }))
     .filter(({ status }) => status.key === "expired" || (status.days >= 0 && status.days <= 5))
@@ -229,6 +234,16 @@ function renderHome() {
       const count = activeFoods.filter((food) => food.location === location.name).length;
       return `<div class="storage-entry"><span class="place-icon">${escapeHTML(location.icon || iconForLocation(location.name))}</span><span><span class="storage-name">${escapeHTML(location.name)}</span><span class="storage-meta">${count ? `${count} ${count === 1 ? "pakiranje" : "pakiranj"}` : "Še prazno"}</span></span><span class="storage-count">${count}</span></div>`;
     }).join("");
+  }
+}
+
+function updateGreeting() {
+  const hour = new Date().getHours();
+  const greeting = hour >= 5 && hour < 12 ? "Dobro jutro." : hour >= 12 && hour < 18 ? "Dober dan." : "Dober večer.";
+  const title = $("#home-title");
+  if (title && title.dataset.greeting !== greeting) {
+    title.dataset.greeting = greeting;
+    title.textContent = greeting;
   }
 }
 
@@ -620,3 +635,8 @@ $("#reset-data").addEventListener("click", () => {
 
 applyTheme(localStorage.getItem(THEME_KEY) || "light");
 render();
+setInterval(() => {
+  const previousGreeting = $("#home-title")?.dataset.greeting;
+  updateGreeting();
+  if (previousGreeting !== $("#home-title")?.dataset.greeting) applyLanguage();
+}, 60_000);
